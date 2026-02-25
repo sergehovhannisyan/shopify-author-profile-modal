@@ -1,0 +1,57 @@
+{%- comment -%}
+  Author Profile Modal Snippet
+  Usage: {% render 'product-author-modal', block: block, author: product.metafields.custom.author_reference.value %}
+{%- endcomment -%}
+
+{%- if author != blank -%}
+    <div class="author-profile-block my-6" {{ block.shopify_attributes }}>
+      
+      <modal-opener class="product-popup-modal__opener no-js-hidden" data-modal="#AuthorModal-{{ block.id }}">
+        <button class="author-trigger-btn" type="button" aria-haspopup="dialog" 
+                style="display: flex; align-items: center; gap: 15px; width: 100%; padding: 15px; border: 1px solid #ddd; border-radius: 12px; background: white; cursor: pointer; text-align: left; transition: all 0.3s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+          
+          {%- if author.photo != blank -%}
+            {{ author.photo | image_url: width: 100 | image_tag: style: 'width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: 1px solid #eee;' }}
+          {%- endif -%}
+          
+          <div style="flex-grow: 1;">
+            <span style="display: block; font-size: 10px; font-weight: bold; color: #2563eb; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 2px;">
+              {{ block.settings.label | default: 'About Author' }}
+            </span>
+            <h4 style="margin: 0; font-size: 16px; font-weight: 600; color: #1a1a1a;">{{ author.full_name }}</h4>
+            <span style="font-size: 12px; color: #666; text-decoration: underline;">Read biography</span>
+          </div>
+        </button>
+      </modal-opener>
+  
+      <modal-dialog id="AuthorModal-{{ block.id }}" class="product-popup-modal">
+        <div role="dialog" aria-label="{{ author.full_name }}" aria-modal="true" class="product-popup-modal__content" tabindex="-1" 
+             style="max-width: 450px; margin: 0 auto; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
+          
+          <button id="ModalClose-{{ block.id }}" type="button" class="product-popup-modal__toggle" aria-label="Close">
+            {% render 'icon-close' %}
+          </button>
+          
+          <div class="product-popup-modal__content-info" style="padding: 40px 25px;">
+            <div style="text-align: center; margin-bottom: 25px;">
+              {%- if author.photo != blank -%}
+                {{ author.photo | image_url: width: 240 | image_tag: style: 'width: 110px; height: 110px; border-radius: 50%; object-fit: cover; margin-bottom: 15px; border: 4px solid #f8f9fa; box-shadow: 0 4px 10px rgba(0,0,0,0.1);' }}
+              {%- endif -%}
+              <h2 style="margin: 0; font-size: 22px; font-weight: 700; color: #111;">{{ author.full_name }}</h2>
+            </div>
+            
+            <div style="width: 40px; height: 2px; background: #2563eb; margin: 0 auto 25px auto;"></div>
+  
+            <div style="text-align: left;">
+              <label style="display: block; font-size: 11px; font-weight: 800; text-transform: uppercase; color: #2563eb; margin-bottom: 12px; letter-spacing: 1px;">
+                Biography
+              </label>
+              <div class="rte" style="line-height: 1.7; font-size: 14px; color: #374151; max-height: 350px; overflow-y: auto; padding-right: 10px;">
+                {{ author.biography | metafield_tag }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </modal-dialog>
+    </div>
+  {%- endif -%}
